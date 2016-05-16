@@ -1,6 +1,7 @@
 import time
 from datetime import datetime, date
 from dateutil.tz import tzutc
+from six import with_metaclass
 import redisco
 from redisco.containers import Set, List, SortedSet, NonPersistentList
 from .attributes import *
@@ -218,8 +219,7 @@ class ModelBase(type):
                 _initialize_referenced(model_class, att)
 
 
-class Model(object):
-    __metaclass__ = ModelBase
+class Model(with_metaclass(ModelBase)):
 
     def __init__(self, **kwargs):
         self.update_attributes(**kwargs)
