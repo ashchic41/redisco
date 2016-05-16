@@ -5,6 +5,10 @@ import collections
 from functools import partial
 from . import default_expire_time
 
+try:
+    unicode
+except NameError:
+    unicode = str
 
 def _parse_values(values):
     (_values,) = values if len(values) == 1 else (None,)
