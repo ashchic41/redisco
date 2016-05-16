@@ -1,7 +1,7 @@
 import time
 from datetime import datetime, date
 from dateutil.tz import tzutc
-from six import with_metaclass
+from six import iteritems, with_metaclass
 import redisco
 from redisco.containers import Set, List, SortedSet, NonPersistentList
 from .attributes import *
@@ -30,10 +30,10 @@ def _initialize_attributes(model_class, name, bases, attrs):
     for parent in bases:
         if not isinstance(parent, ModelBase):
             continue
-        for k, v in parent._attributes.iteritems():
+        for k, v in iteritems(parent._attributes):
             model_class._attributes[k] = v
 
-    for k, v in attrs.iteritems():
+    for k, v in iteritems(attrs):
         if isinstance(v, Attribute):
             model_class._attributes[k] = v
             v.name = v.name or k
@@ -67,10 +67,10 @@ def _initialize_lists(model_class, name, bases, attrs):
     for parent in bases:
         if not isinstance(parent, ModelBase):
             continue
-        for k, v in parent._lists.iteritems():
+        for k, v in iteritems(parent._lists):
             model_class._lists[k] = v
 
-    for k, v in attrs.iteritems():
+    for k, v in iteritems(attrs):
         if isinstance(v, ListField):
             model_class._lists[k] = v
             v.name = v.name or k
@@ -86,7 +86,7 @@ def _initialize_references(model_class, name, bases, attrs):
     for parent in bases:
         if not isinstance(parent, ModelBase):
             continue
-        for k, v in parent._references.iteritems():
+        for k, v in iteritems(parent._references):
             model_class._references[k] = v
             # We skip updating the attributes since this is done
             # already at the parent construction and then copied back
@@ -95,7 +95,7 @@ def _initialize_references(model_class, name, bases, attrs):
             if refd:
                 deferred.append(refd)
 
-    for k, v in attrs.iteritems():
+    for k, v in iteritems(attrs):
         if isinstance(v, ReferenceField):
             model_class._references[k] = v
             v.name = v.name or k
@@ -117,14 +117,14 @@ def _initialize_indices(model_class, name, bases, attrs):
     for parent in bases:
         if not isinstance(parent, ModelBase):
             continue
-        for k, v in parent._attributes.iteritems():
+        for k, v in iteritems(parent._attributes):
             if v.indexed:
                 model_class._indices.append(k)
-        for k, v in parent._lists.iteritems():
+        for k, v in iteritems(parent._lists):
             if v.indexed:
                 model_class._indices.append(k)
 
-    for k, v in attrs.iteritems():
+    for k, v in iteritems(attrs):
         if isinstance(v, (Attribute, ListField)) and v.indexed:
             model_class._indices.append(k)
     if model_class._meta['indices']:
@@ -143,7 +143,7 @@ def _initialize_counters(model_class, name, bases, attrs):
         for c in parent._counters:
             model_class._counters.append(c)
 
-    for k, v in attrs.iteritems():
+    for k, v in iteritems(attrs):
         if isinstance(v, Counter):
             # When subclassing, we want to override the attributes
             if k in model_class._counters:
@@ -544,7 +544,7 @@ class Model(with_metaclass(ModelBase)):
         self._update_indices(pipeline)
         h = {}
         # attributes
-        for k, v in self.attributes.iteritems():
+        for k, v in iteritems(self.attributes):
             if isinstance(v, DateTimeField):
                 if v.auto_now:
                     setattr(self, k, datetime.now(tz=tzutc()))
@@ -574,7 +574,7 @@ class Model(with_metaclass(ModelBase)):
             pipeline.hmset(self.key(), h)
 
         # lists
-        for k, v in self.lists.iteritems():
+        for k, v in iteritems(self.lists):
             l = List(self.key()[k], pipeline=pipeline)
             l.clear()
             values = getattr(self, k)

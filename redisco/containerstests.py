@@ -2,6 +2,10 @@ import unittest
 import redisco
 from redisco import containers as cont
 
+try:
+    unicode
+except NameError:
+    unicode = str
 
 class SetTestCase(unittest.TestCase):
     def setUp(self):
