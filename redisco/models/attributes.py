@@ -270,7 +270,9 @@ class TimeDeltaField(Attribute):
                 value = 0.
             td = timedelta(seconds=value)
             return td
-        except TypeError, ValueError:
+        except TypeError:
+            return None
+        except ValueError:
             return None
 
     def typecast_for_storage(self, value):
