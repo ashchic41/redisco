@@ -355,13 +355,13 @@ class TypedListTestCase(unittest.TestCase):
             monies = u'\u0024\u00a2\u00a3\u00a5'
             alpha.append(monies)
             val = alpha[-1]
-            self.assertEquals(monies, val)
+            self.assertEqual(monies, val)
 
         beta = cont.TypedList('beta', int)
         for i in xrange(1000):
             beta.append(i)
         for i, x in enumerate(beta):
-            self.assertEquals(i, x)
+            self.assertEqual(i, x)
 
         charlie = cont.TypedList('charlie', float)
         for i in xrange(100):
@@ -369,7 +369,7 @@ class TypedListTestCase(unittest.TestCase):
             charlie.append(val)
         for i, x in enumerate(charlie):
             val = 1 * pow(10, i*-1)
-            self.assertEquals(x, val)
+            self.assertEqual(x, val)
 
     def test_model_type(self):
         from redisco import models
@@ -384,11 +384,12 @@ class TypedListTestCase(unittest.TestCase):
         l.extend(Person.objects.all())
 
         for person in l:
-            if person.name == 'clayg':
-                self.assertEquals(iamteam, clayg.friend)
+            if "name" in person.attributes and person.name == 'clayg':
+                print(person.name, clayg.friend)
+                self.assertEqual(iamteam, clayg.friend)
             else:
                 # this if failing for some reason ???
-                #self.assertEquals(person.friend, clayg)
+                #self.assertEqual(person.friend, clayg)
                 pass
 
 
