@@ -12,8 +12,9 @@ from six import PY3, integer_types
 from .exceptions import FieldValidationError, MissingID
 
 __all__ = ['Attribute', 'CharField', 'ListField', 'DateTimeField',
-        'DateField', 'ReferenceField', 'Collection', 'IntegerField',
-        'FloatField', 'BooleanField', 'Counter', 'ZINDEXABLE']
+        'DateField', 'TimeDeltaField', 'ReferenceField', 'Collection',
+        'IntegerField', 'FloatField', 'BooleanField', 'Counter',
+        'ZINDEXABLE']
 
 if PY3:
     unicode = basestring = str
