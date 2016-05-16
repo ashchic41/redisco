@@ -1,8 +1,7 @@
-try:
-    unicode
-except NameError:
-    # Python 3
-    basestring = unicode = str
+from six import PY3
+
+if PY3:
+    unicode = basestring = str
 
 class Key(unicode):
     def __getitem__(self, key):

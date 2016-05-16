@@ -1,11 +1,11 @@
 import unittest
 import redisco
 from redisco import containers as cont
+from six import PY3
+from six.moves import xrange
 
-try:
-    unicode
-except NameError:
-    unicode = str
+if PY3:
+    unicode = basestring = str
 
 class SetTestCase(unittest.TestCase):
     def setUp(self):

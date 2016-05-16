@@ -8,12 +8,15 @@ from datetime import datetime, date
 from dateutil.tz import tzutc, tzlocal
 from calendar import timegm
 from redisco.containers import List
+from six import PY3, integer_types
 from .exceptions import FieldValidationError, MissingID
 
 __all__ = ['Attribute', 'CharField', 'ListField', 'DateTimeField',
         'DateField', 'ReferenceField', 'Collection', 'IntegerField',
         'FloatField', 'BooleanField', 'Counter', 'ZINDEXABLE']
 
+if PY3:
+    unicode = basestring = str
 
 class Attribute(object):
     """Defines an attribute of the model.
@@ -162,7 +165,7 @@ class IntegerField(Attribute):
         return int
 
     def acceptable_types(self):
-        return (int, long)
+        return integer_types
 
 
 class FloatField(Attribute):

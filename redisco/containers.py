@@ -3,12 +3,12 @@
 
 import collections
 from functools import partial
+from six import PY3
+from six.moves import xrange
 from . import default_expire_time
 
-try:
-    unicode
-except NameError:
-    unicode = str
+if PY3:
+    unicode = basestring = str
 
 def _parse_values(values):
     (_values,) = values if len(values) == 1 else (None,)
@@ -713,13 +713,13 @@ class TypedList(object):
         self.klass = self.value_type(target_type)
         self._klass_args = type_args
         self._klass_kwargs = type_kwargs
-        from models.base import Model
+        from .models.base import Model
         self._redisco_model = issubclass(self.klass, Model)
 
     def value_type(self, target_type):
         if isinstance(target_type, basestring):
             t = target_type
-            from models.base import get_model_from_key
+            from .models.base import get_model_from_key
             target_type = get_model_from_key(target_type)
             if target_type is None:
                 raise ValueError("Unknown Redisco class %s" % t)

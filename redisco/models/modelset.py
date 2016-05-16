@@ -1,6 +1,7 @@
 """
 Handles the queries.
 """
+from six import iteritems
 from .attributes import IntegerField, DateTimeField
 import redisco
 from redisco.containers import SortedSet, Set, List, NonPersistentList
@@ -257,7 +258,7 @@ class ModelSet(Set):
         [...]
         """
         opts = {}
-        for k, v in kwargs.iteritems():
+        for k, v in iteritems(kwargs):
             if k in self.model_class._indices:
                 opts[k] = v
         o = self.filter(**opts).first()
@@ -308,7 +309,7 @@ class ModelSet(Set):
         :return: the new Set
         """
         indices = []
-        for k, v in self._filters.iteritems():
+        for k, v in iteritems(self._filters):
             index = self._build_key_from_filter_item(k, v)
             if k not in self.model_class._indices:
                 raise AttributeNotIndexed(
@@ -332,7 +333,7 @@ class ModelSet(Set):
         :return: the new Set
         """
         indices = []
-        for k, v in self._exclusions.iteritems():
+        for k, v in iteritems(self._exclusions):
             index = self._build_key_from_filter_item(k, v)
             if k not in self.model_class._indices:
                 raise AttributeNotIndexed(
@@ -354,7 +355,7 @@ class ModelSet(Set):
         :return: a SortedSet with the ids.
 
         """
-        k, v = self._zfilters[0].items()[0]
+        k, v = list(self._zfilters[0].items())[0]
         try:
             att, op = k.split('__')
         except ValueError:

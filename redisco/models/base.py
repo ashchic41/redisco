@@ -1,7 +1,9 @@
 import time
 from datetime import datetime, date
+from itertools import chain
+
 from dateutil.tz import tzutc
-from six import iteritems, with_metaclass
+from six import PY3, iteritems, with_metaclass
 import redisco
 from redisco.containers import Set, List, SortedSet, NonPersistentList
 from .attributes import *
@@ -13,6 +15,9 @@ from .attributes import Counter
 __all__ = ['Model', 'from_key']
 
 ZINDEXABLE = (IntegerField, DateTimeField, DateField, FloatField)
+
+if PY3:
+    unicode = basestring = str
 
 ##############################
 # Model Class Initialization #
@@ -297,8 +302,8 @@ class Model(with_metaclass(ModelBase)):
         >>> f.name
         'Tesla'
         """
-        attrs = self.attributes.values() + self.lists.values() \
-                + self.references.values()
+        attrs = chain(self.attributes.values(), self.lists.values(), \
+                self.references.values())
         for att in attrs:
             if att.name in kwargs:
                 att.__set__(self, kwargs[att.name])
@@ -507,8 +512,7 @@ class Model(with_metaclass(ModelBase)):
     @property
     def fields(self):
         """Returns the list of field names of the model."""
-        return (self.attributes.values() + self.lists.values()
-                + self.references.values())
+        return chain(self.attributes.values(), self.lists.values(), self.references.values())
 
     @property
     def counters(self):

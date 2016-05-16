@@ -7,7 +7,11 @@ import unittest
 from datetime import date
 from redisco import models
 from redisco.models.base import Mutex
+from six import PY3
 from dateutil.tz import tzlocal
+
+if PY3:
+    unicode = basestring = str
 
 class Person(models.Model):
     first_name = models.CharField(required=True)
