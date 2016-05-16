@@ -38,8 +38,8 @@ class Container(object):
         >>> s.add('1')
         1
         >>> s.clear()
-        >>> s.members
-        set([])
+        >>> list(s.members)
+        []
 
 
         """
