@@ -56,7 +56,12 @@ class ModelTestCase(RediscoTestCase):
         self.assertEqual('1', person1.id)
         self.assertEqual('2', person2.id)
 
+        granny = Person.objects.get_by_id('1')
+        self.assertEqual(granny.first_name, "Granny")
+        self.assertEqual(granny.last_name, "Goose")
+
         jejomar = Person.objects.get_by_id('2')
+        self.assertEqual("Jejomar", jejomar.first_name)
         self.assertEqual(None, jejomar.last_name)
 
     def test_save_succeed(self):
