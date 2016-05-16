@@ -385,7 +385,6 @@ class TypedListTestCase(unittest.TestCase):
 
         for person in l:
             if "name" in person.attributes and person.name == 'clayg':
-                print(person.name, clayg.friend)
                 self.assertEqual(iamteam, clayg.friend)
             else:
                 # this if failing for some reason ???
