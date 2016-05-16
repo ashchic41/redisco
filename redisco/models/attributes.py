@@ -54,7 +54,6 @@ class Attribute(object):
         try:
             return getattr(instance, '_' + self.name)
         except AttributeError:
-            print(">>> AttributeError: ", self.default)
             self.__set__(instance, self.default)
             return self.default
 
