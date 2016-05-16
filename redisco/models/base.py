@@ -459,7 +459,10 @@ class Model(with_metaclass(ModelBase)):
         Setting the id for the object will fetch it from the datastorage.
         """
         self._id = str(val)
-        stored_attrs = self.db.hgetall(self.key())
+        if PY3:
+            stored_attrs = { k.decode("utf-8"):v for k, v in self.db.hgetall(self.key()).items() }
+        else:
+            stored_attrs = self.db.hgetall(self.key()).values()
         attrs = self.attributes.values()
         for att in attrs:
             if att.name in stored_attrs and not isinstance(att, Counter):
