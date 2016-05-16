@@ -1,5 +1,6 @@
 import os
 import unittest
+from six import PY3
 from redisco.containerstests import (SetTestCase, ListTestCase, TypedListTestCase, 
         SortedSetTestCase, HashTestCase)
 from redisco.models.basetests import (ModelTestCase, DateFieldTestCase, FloatFieldTestCase,
@@ -10,7 +11,7 @@ from redisco.models.basetests import (ModelTestCase, DateFieldTestCase, FloatFie
 import redisco
 REDIS_DB = int(os.environ.get('REDIS_DB', 15)) # WARNING TESTS FLUSHDB!!!
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
-redisco.connection_setup(host="localhost", port=REDIS_PORT, db=REDIS_DB)
+redisco.connection_setup(host="localhost", port=REDIS_PORT, db=REDIS_DB, decode_responses=PY3)
 
 typed_list_suite = unittest.TestLoader().loadTestsFromTestCase(TypedListTestCase)
 

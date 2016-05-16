@@ -106,7 +106,7 @@ class Set(Container):
         3
         >>> s.add(["4"])
         1
-        >>> print s
+        >>> print(s)
         <Set 'test' set(['1', '3', '2', '4'])>
         >>> s.clear()
 

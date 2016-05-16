@@ -32,7 +32,7 @@ class ModelSet(Set):
         Will look in _set to get the id and simply return the instance of the model.
         """
         if isinstance(index, slice):
-            return map(lambda id: self._get_item_with_id(id), self._set[index])
+            return list(map(lambda id: self._get_item_with_id(id), self._set[index]))
         else:
             id = self._set[index]
             if id:

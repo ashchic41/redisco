@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+from six import PY3
+
 default_connection_settings = {}
 try:
     import redislite as redis
@@ -7,7 +10,8 @@ except ImportError:
     default_connection_settings = {
         'host': 'localhost',
         'port': 6379,
-        'db': 0
+        'db': 0,
+        'decode_responses': PY3,
     }
 
 

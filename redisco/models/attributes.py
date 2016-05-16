@@ -298,7 +298,7 @@ class ListField(object):
             if val is not None:
                 klass = self.value_type()
                 if self._redisco_model:
-                    val = filter(lambda o: o is not None, [klass.objects.get_by_id(v) for v in val])
+                    val = list(filter(lambda o: o is not None, [klass.objects.get_by_id(v) for v in val]))
                 else:
                     val = [klass(v) for v in val]
             self.__set__(instance, val)
