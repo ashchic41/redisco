@@ -448,7 +448,7 @@ class ReferenceField(object):
 class Counter(IntegerField):
     def __init__(self, **kwargs):
         super(Counter, self).__init__(**kwargs)
-        if not kwargs.has_key('default') or self.default is None:
+        if not 'default' in kwargs or self.default is None:
             self.default = 0
 
     def __set__(self, instance, value):
