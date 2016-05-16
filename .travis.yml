@@ -10,4 +10,8 @@ services:
 install:
   - pip install .
 # command to run tests
-script: nosetests --with-doctest
+script:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.6 ]]; then nosetests --with-doctest; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then nosetests --with-doctest; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then nosetests; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.5 ]]; then nosetests; fi
