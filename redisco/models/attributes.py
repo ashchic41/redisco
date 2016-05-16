@@ -273,7 +273,7 @@ class ListField(object):
         self.required = required
         self.validator = validator
         self.default = default or []
-        from base import Model
+        from .base import Model
         self._redisco_model = (isinstance(target_type, basestring) or
             issubclass(target_type, Model))
 
@@ -301,7 +301,7 @@ class ListField(object):
     def value_type(self):
         if isinstance(self._target_type, basestring):
             t = self._target_type
-            from base import get_model_from_key
+            from .base import get_model_from_key
             self._target_type = get_model_from_key(self._target_type)
             if self._target_type is None:
                 raise ValueError("Unknown Redisco class %s" % t)
