@@ -349,11 +349,13 @@ class TypedListTestCase(unittest.TestCase):
         self.client.flushdb()
 
     def test_basic_types(self):
-        alpha = cont.TypedList('alpha', unicode, type_args=('UTF-8',))
-        monies = u'\u0024\u00a2\u00a3\u00a5'
-        alpha.append(monies)
-        val = alpha[-1]
-        self.assertEquals(monies, val)
+        if not PY3:
+            # Python3 strings are unicode, so nothing to convert to there
+            alpha = cont.TypedList('alpha', unicode, type_args=('UTF-8',))
+            monies = u'\u0024\u00a2\u00a3\u00a5'
+            alpha.append(monies)
+            val = alpha[-1]
+            self.assertEquals(monies, val)
 
         beta = cont.TypedList('beta', int)
         for i in xrange(1000):
