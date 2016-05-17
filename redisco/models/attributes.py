@@ -55,7 +55,6 @@ class Attribute(object):
         try:
             return getattr(instance, '_' + self.name)
         except AttributeError:
-            print(">>> AttributeError: ", self.default)
             self.__set__(instance, self.default)
             return self.default
 
@@ -65,7 +64,10 @@ class Attribute(object):
     def typecast_for_read(self, value):
         """Typecasts the value for reading from Redis."""
         # The redis client encodes all unicode data to utf-8 by default.
-        return value.decode('utf-8')
+        if PY3:
+            return value
+        else:
+            return value.decode('utf-8')
 
     def typecast_for_storage(self, value):
         """Typecasts the value for storing to Redis."""
