@@ -56,12 +56,7 @@ class ModelTestCase(RediscoTestCase):
         self.assertEqual('1', person1.id)
         self.assertEqual('2', person2.id)
 
-        granny = Person.objects.get_by_id('1')
-        self.assertEqual(granny.first_name, "Granny")
-        self.assertEqual(granny.last_name, "Goose")
-
         jejomar = Person.objects.get_by_id('2')
-        self.assertEqual("Jejomar", jejomar.first_name)
         self.assertEqual(None, jejomar.last_name)
 
     def test_save_succeed(self):
@@ -638,11 +633,11 @@ class Student(models.Model):
     average = models.FloatField(required=True)
 
 class FloatFieldTestCase(RediscoTestCase):
-    def test_CharField(self):
+    def test_FloatField(self):
         s = Student(name="Richard Cypher", average=86.4)
         self.assertEqual(86.4, s.average)
 
-    def test_saved_CharField(self):
+    def test_saved_FloatField(self):
         s = Student.objects.create(name="Richard Cypher",
                       average=3.14159)
         assert s
@@ -663,7 +658,7 @@ class FloatFieldTestCase(RediscoTestCase):
 
 
 class Task(models.Model):
-    name = models.CharField()
+    name = models.CharField(default="Unknown")
     done = models.BooleanField()
 
 class BooleanFieldTestCase(RediscoTestCase):
@@ -678,11 +673,19 @@ class BooleanFieldTestCase(RediscoTestCase):
 
         t = Task.objects.all()[0]
         self.assertFalse(t.done)
+        self.assertEqual(t.name, "Cook dinner")
         t.done = True
         assert t.save()
 
         t = Task.objects.all()[0]
         self.assertTrue(t.done)
+
+        t_default = Task(done=False)
+        assert t_default.save()
+
+        t_default = Task.objects.get_by_id(t_default.id)
+        self.assertTrue(t_default.name == "Unknown")
+
 
     def test_indexing(self):
         assert Task.objects.create(name="Study Lua", done=False)
@@ -898,22 +901,23 @@ class TimeDeltaFieldTestCase(RediscoTestCase):
 
         duration = timedelta(seconds=10)
         default_duration = timedelta(seconds=20)
-        class Event(models.Model):
+        class DurationEvent(models.Model):
             name = models.CharField()
             started = models.DateTimeField()
             duration = models.TimeDeltaField(default=timedelta(seconds=20))
 
 
-        event_ten_sec = Event(name="Event 10 seconds", duration=timedelta(seconds=10))
+        event_ten_sec = DurationEvent(name="Event 10 seconds", duration=timedelta(seconds=10))
+        assert event_ten_sec.is_valid(), [event_ten_sec.errors ]
         assert event_ten_sec.save()
-        event_ten_sec = Event.objects.get_by_id(event_ten_sec.id)
+        event_ten_sec = DurationEvent.objects.get_by_id(event_ten_sec.id)
         self.assertEqual(duration, event_ten_sec.duration)
         assert event_ten_sec.duration
 
-        event_default_duration = Event(name="Event default duration")
+        event_default_duration = DurationEvent(name="Event default duration")
         assert event_default_duration.save()
-        event_default_duration = Event.objects.get_by_id(event_default_duration.id)
-        self.assertEqual(duration, default_duration)
+        event_default_duration = DurationEvent.objects.get_by_id(event_default_duration.id)
+        self.assertEqual(default_duration, event_default_duration.duration)
         assert event_default_duration.duration
 
 

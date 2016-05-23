@@ -273,12 +273,12 @@ class TimeDeltaField(Attribute):
             # We load as if it is UTC time
             if value is None:
                 value = 0.
-            td = timedelta(seconds=value)
+            td = timedelta(seconds=float(value))
             return td
         except TypeError:
-            return timedelta(seconds=0.)
+            return None
         except ValueError:
-            return timedelta(seconds=0.)
+            return None
 
     def typecast_for_storage(self, value):
         if not isinstance(value, timedelta):
