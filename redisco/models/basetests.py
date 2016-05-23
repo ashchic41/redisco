@@ -891,6 +891,32 @@ class DateTimeFieldTestCase(RediscoTestCase):
         assert post.created_at
 
 
+class TimeDeltaFieldTestCase(RediscoTestCase):
+
+    def test_basic(self):
+        from datetime import timedelta
+
+        duration = timedelta(seconds=10)
+        default_duration = timedelta(seconds=20)
+        class Event(models.Model):
+            name = models.CharField()
+            started = models.DateTimeField()
+            duration = models.TimeDeltaField(default=timedelta(seconds=20))
+
+
+        event_ten_sec = Event(name="Event 10 seconds", duration=timedelta(seconds=10))
+        assert event_ten_sec.save()
+        event_ten_sec = Event.objects.get_by_id(event_ten_sec.id)
+        self.assertEqual(duration, event_ten_sec.duration)
+        assert event_ten_sec.duration
+
+        event_default_duration = Event(name="Event default duration")
+        assert event_default_duration.save()
+        event_default_duration = Event.objects.get_by_id(event_default_duration.id)
+        self.assertEqual(duration, default_duration)
+        assert event_default_duration.duration
+
+
 class CounterFieldTestCase(RediscoTestCase):
 
     def test_basic(self):

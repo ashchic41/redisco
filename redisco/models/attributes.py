@@ -276,9 +276,9 @@ class TimeDeltaField(Attribute):
             td = timedelta(seconds=value)
             return td
         except TypeError:
-            return None
+            return timedelta(seconds=0.)
         except ValueError:
-            return None
+            return timedelta(seconds=0.)
 
     def typecast_for_storage(self, value):
         if not isinstance(value, timedelta):
@@ -286,10 +286,10 @@ class TimeDeltaField(Attribute):
                     (self.name, type(value)))
         if value is None:
             return None
-        return "%d" % value.totalseconds()
+        return "%d" % value.total_seconds()
 
     def value_type(self):
-        return date
+        return timedelta
 
     def acceptable_types(self):
         return self.value_type()
