@@ -273,7 +273,7 @@ class TimeDeltaField(Attribute):
             # We load as if it is UTC time
             if value is None:
                 value = 0.
-            td = timedelta(seconds=float(value))
+            td = timedelta(seconds=float(value), milliseconds=float(value) / 1000., microseconds=float(value) / 1000000.)
             return td
         except TypeError:
             return None
