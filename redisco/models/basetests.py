@@ -900,11 +900,11 @@ class TimeDeltaFieldTestCase(RediscoTestCase):
         from datetime import timedelta
 
         duration = timedelta(seconds=10)
-        default_duration = timedelta(seconds=20)
+        default_duration = timedelta(seconds=20.0123456)
         class DurationEvent(models.Model):
             name = models.CharField()
             started = models.DateTimeField()
-            duration = models.TimeDeltaField(default=timedelta(seconds=20))
+            duration = models.TimeDeltaField(default=timedelta(seconds=20.0123456))
 
 
         event_ten_sec = DurationEvent(name="Event 10 seconds", duration=timedelta(seconds=10))
