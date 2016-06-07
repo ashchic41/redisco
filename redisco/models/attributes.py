@@ -286,7 +286,7 @@ class TimeDeltaField(Attribute):
                     (self.name, type(value)))
         if value is None:
             return None
-        return "%d" % value.total_seconds()
+        return "%f" % value.total_seconds()
 
     def value_type(self):
         return timedelta
